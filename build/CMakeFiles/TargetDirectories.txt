@@ -1,0 +1,3 @@
+C:/Users/86159/Desktop/dscode/build/CMakeFiles/hello.dir
+C:/Users/86159/Desktop/dscode/build/CMakeFiles/edit_cache.dir
+C:/Users/86159/Desktop/dscode/build/CMakeFiles/rebuild_cache.dir
