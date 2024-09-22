@@ -1,8 +1,0 @@
-[
-{
-  "directory": "C:/Users/86159/Desktop/dscode/build",
-  "command": "C:/TDM-GCC-64/bin/g++.exe   -g -o CMakeFiles/hello.dir/hello.obj -c C:/Users/86159/Desktop/dscode/hello.cpp",
-  "file": "C:/Users/86159/Desktop/dscode/hello.cpp",
-  "output": "CMakeFiles/hello.dir/hello.obj"
-}
-]
