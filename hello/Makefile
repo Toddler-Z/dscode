@@ -29,7 +29,7 @@ $(TARGET): $(OBJECTS)
 
 # 清理编译产生的文件
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	del $(TARGET) $(OBJECTS) hello.exe
 
 # 伪目标，避免与同名文件冲突
 .PHONY: all clean
