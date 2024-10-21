@@ -1,0 +1,83 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry, CJKutf8}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{张笑娟，3220101565}
+\chead{数据结构与算法第四次作业}
+\rhead{Oct.21th, 2024}
+
+\section{测试程序的设计思路}
+\begin{enumerate}  
+    \item 我在\texttt{List.h}文件中创建了\texttt{printList}函数，用来打印整个列表。  
+    \item 我利用默认构造函数初始化了一个列表\texttt{lst1}，并调用\texttt{printList}函数打印了它。  
+    \item 在\texttt{lst1}中，我利用for循环函数和\texttt{push\_back}函数向\texttt{lst1}中插入了整数0到9，并且用\texttt{push\_front}函数插入了整数5。接着调用\texttt{printList}函数打印了\texttt{lst1}。  
+    \item 我利用初始化列表构造函数，拷贝构造函数，移动构造函数，赋值运算符依次创造了\texttt{lst2}, \texttt{lst3}, \texttt{lst4}, \texttt{lst5}四个列表，并调用\texttt{printList}函数打印了它们。其中，\texttt{lst2}初始化了1到5的整数列表，\texttt{lst2}拷贝到\texttt{lst3}，\texttt{lst3}移动到\texttt{lst4}，\texttt{lst1}赋值给\texttt{lst5}。  
+    \item 在\texttt{lst2}中，我利用\texttt{begin()}函数和++运算符，将\texttt{begin}变量指向第二个元素，并利用\texttt{insert()}函数，在这个位置插入6；同时，我利用\texttt{end()}函数和\texttt{--}运算符，将\texttt{end}变量指向倒数第二个元素，并利用\texttt{erase}函数，删去这个位置的元素。接着调用\texttt{printList}函数打印了\texttt{lst2}。  
+    \item 在\texttt{lst5}中，我利用\texttt{pop\_front}函数和\texttt{pop\_back}函数，分别删除了第一个和最后一个元素，之后我调用\texttt{front()}函数和\texttt{back()}函数，打印了删除后的第一个和最后一个元素。
+    然后，我利用size函数，打印了列表的大小。最后，我打印了\texttt{lst5}。
+    \item 在\texttt{lst4}中，我利用\texttt{begin()}函数和++运算符，将\texttt{it1}指向第三个元素；利用\texttt{end()}函数和\texttt{--}运算符，将\texttt{it2}指向倒数第一个元素。接着，我利用\texttt{erase(it1, it2)}函数，删去了第三个元素到第五个元素（不包括第五个元素）之间的元素。
+    接着我调用\texttt{printList}函数打印了\texttt{lst4}。然后我利用\texttt{empty}函数，判断了\texttt{lst4}是否为空。最后，我利用\texttt{clear}函数，清空了\texttt{lst4}，并且再次用\texttt{empty}函数判断了\texttt{lst4}是否为空。
+
+\end{enumerate}
+
+\section{测试的结果}  
+ 
+    测试结果一切正常。  
+      
+    我用 valgrind 进行测试，发现没有发生内存泄漏。  
+      
+\section{（可选）bug报告}  
+      
+    我发现了一个 bug，触发条件如下：  
+\begin{enumerate}  
+    \item 首先，我在第6步中，不使用\texttt{lst5}进行测试，而是使用\texttt{lst3}进行测试。  
+    \item 然后，程序运行到第5步结束就会终止，后续不再输出。  
+    \item 经过反复确认，是\texttt{pop\_front}函数，\texttt{pop\_back}函数，\texttt{front}函数以及\texttt{back}函数无法正确工作。  
+\end{enumerate}  
+      
+    据我分析，它出现的原因是:在第4步中，我将\texttt{lst3}移动到\texttt{lst4}，但是由于移动构造函数的原因，\texttt{lst3}的元素并没有被拷贝，而是直接移动到了\texttt{lst4}。此时，\texttt{lst3}处于有效但为空的状态,导致\texttt{pop\_front}函数，\texttt{pop\_back}函数，\texttt{front}函数以及\texttt{back}函数无法正确工作。\\
+   
+    改正措施：利用\texttt{lst5}进行测试，而不是\texttt{lst3}。     
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
