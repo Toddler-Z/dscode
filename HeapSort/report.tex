@@ -1,0 +1,84 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry, CJKutf8}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{张笑娟，3220101565}
+\chead{数据结构与算法第7次作业}
+\rhead{Dec.2nd, 2024}
+
+\section{整体思路}
+   对于vector，首先用$make\_heap$函数将其构建为一个最大堆。
+
+   然后从堆的最后一个节点开始，依次向前，利用$pop\_heap$函数将堆顶最大元素弹出并且放到vector末尾，
+   不过要注意的是弹出的堆顶元素依次从vector末尾往前放，且堆重排的时候不用考虑。
+
+   弹出堆顶元素后，再利用percDown函数将除弹出元素以外的元素进行重排，具体做法是从堆顶开始，是父节点均比子节点大或者相等。
+   具体实现是，将父节点与比其大的子节点进行调换，然后再调整子节点，直到不需要调整为止。
+
+   就此，可以进行堆排序。
+
+\section{测试流程}
+首先，我写了产生随机、有序、逆序、重复序列的函数，然后写了check函数，用于检测排序是否正确。
+
+再然后，我写了testheapsort和testsort\_heap的函数，内含check函数和chrono函数，分别用来测试heapsort和std::sort\_heap的性能以及运行时间和排序的正确性。
+
+最后，我再main函数中生成随机、有序、逆序、重复序列，每个序列1000000个元素，分别测试heapsort和std::sort\_heap的性能。
+
+\section{测试结果}   
+由下表可见，heapsort和std::sort\_heap的性能差距不大，但std::sort\_heap的运行时间更短，每个用例少0.002s~0.003s左右。
+\\
+\begin{tabular}{|c|c|c|}
+\hline
+Sequence Type & heapsort Time (s) & std::sort\_heap Time (s) \\
+\hline
+Random & 0.099989 & 0.0964148 \\
+Sorted & 0.0421415 & 0.0392575 \\
+Reverse & 0.0477491 & 0.0453427 \\
+Repetitive & 0.0515947 & 0.0488591 \\
+\hline
+\end{tabular}
+    \\
+测试时输出结果正常，无内存泄露。(AMD Ryzen 7 5800H)
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
