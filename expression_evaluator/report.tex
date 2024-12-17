@@ -1,0 +1,114 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry, CJKutf8}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{张笑娟，3220101565}
+\chead{四则运算求值程序设计报告}
+\rhead{Dec.17, 2024}
+
+
+\section{项目背景}
+本项目实现了一个能处理中缀表达式的s四则运算求值程序，包括加法、减法、乘法、除法和括号，可以处理负数和科学计数法（如-2.3e-2.4）。程序还能检测非法输入。
+
+\section{设计思路}
+\subsection{算法概要}
+程序通过中缀转后缀表达式的方法实现求值。首先做一些前期准备，包括判断数字字符、判断运算符、计算运算符的优先级、判断括号匹配、编写后缀运算函数。
+然后在evaluate函数中,进行后缀表达式的求值。具体步骤如下：
+\begin{itemize}
+    \item 判断括号是否匹配；
+    \item 定义两个栈，一个存储运算数（operands），一个存储运算符（operators）；
+    \item 对表达式进行逐个遍历；
+    \item 如果遇到空格，跳过；
+    \item 如果遇到数字字符或者负号（位于字符串的开头或位于运算符之后或位于左括号之后），则将下一个运算符之前的所有数字字符转化为一个数字，并将数字压入operands栈，具体步骤如下：
+       
+        \begin{enumerate}
+            \item 定义一个double变量operand初始值为0；
+            \item 定义一个bool变量isNegative初始值为false，如果遇到负号，则设置为true，并跳过负号；
+            \item 处理整数部分：从当前位置开始，将其转化为数字，并将数字加上operand乘以10，并将结果赋值给operand，然后下标加1，
+            直到遇到非数字字符或表达式结束，跳出循环；
+            \item 处理小数部分：如果遇到小数点，先跳过小数点，再将下一个字符转化为数字，并计算小数位数j,并将数字乘以10的负j次方，并将结果加上operand，然后赋值给operand，然后下标加1，
+            直到遇到非数字字符或表达式结束，跳出循环；
+            \item 处理指数部分：如果遇到字符e,先跳过字符e，再将下一个运算符或结尾前的所有数字字符转化为一个数字exponent，并将operand乘以10的exponent次方，赋值给operand;
+            \item 如果isNegative为true，则将operand乘以-1;
+            \item 将operand压入operands栈；
+        \end{enumerate}
+
+    \item 如果遇到运算符，如果operators栈不为空，且当前运算符优先级小于或等于operators栈顶运算符的优先级，则先处理operators栈顶的运算符的运算，然后则将当前运算符压入operators栈。否则直接将当前运算符压入operators栈；
+    \item 如果遇到左括号，则直接压入operators栈；
+    \item 如果遇到右括号，则处理operators栈顶的运算符的运算，直到遇到左括号为止，然后弹出左括号；
+    \item 当表达式遍历完成后，处理operators栈中剩余的运算符的运算，并将运算结果压入operands栈；
+    \item 从operands栈中弹出最后一个结果，作为表达式的最终结果。
+
+\end{itemize}
+
+\subsection{合法性检查}
+- 检查括号匹配。 
+
+- 检测运算符在表达式开头或结尾、连续运算符、除数为零等错误。  
+
+\section{测试思路及结果}
+测试思路如下：
+\begin{enumerate}
+    \item 初始化表达式为： 。
+    \item 输入合法表达式，则输出表达式及其求值结果。若输入非法，则输出ILLEGAL。若输入exit，则退出程序。
+\end{enumerate}
+
+测试结果如下表所示：
+
+\bigskip
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{输入表达式} & \textbf{结果} & \textbf{备注}    \\ \hline
+3+4*(5-2*2)/2        & 3+4*(5-2*2)/2 = 5          & 基本运算      \\ \hline
+-3*-3+2/-2--1+-5                & -3*-3+2/-2--1+-5 = 4       & 负数      \\ \hline
+-2.2e2.2--2.2e-0.5               & -2.2e2.2--2.2e-0.5 = -347.981           & 科学计数法    \\ \hline
+3-(2*(4-5*(1-0.4/2))-3)        & 3-(2*(4-5*(1-0.4/2))-3) = 6  & 多层括号    \\  \hline
+3-(2*(4-5*(1-0.4/2))-3        & ILLEGAL: Parentheses are not balanced   & 括号不匹配   \\ \hline
+*3-4   &ILLEGAL: Invalid operator & 运算符在开头 \\ \hline
+3-+4   &ILLEGAL: Invalid operator   & 运算符连续 \\ \hline
+3+4-   &ILLEGAL: Invalid operator   & 运算符在结尾 \\ \hline
+4 /(3-3)  &ILLEGAL: Division by zero   & 除数为零 \\ \hline
+exit &    & 退出程序 \\ \hline
+\end{tabular}
+\section{总结}
+本项目实现了一个功能完善的四则运算求值程序，支持负数和科学计数法，并能检测非法输入。程序无内存泄露。
+
+\end{document}
